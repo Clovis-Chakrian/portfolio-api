@@ -24,6 +24,9 @@ public class Curriculum {
     private String position;
     private String presentation;
 
+    @OneToMany(mappedBy = "curriculum")
     private List<Experience> Experiences;
+
+    @OneToMany(mappedBy = "curriculum")
     private List<Education> Education;
 }
