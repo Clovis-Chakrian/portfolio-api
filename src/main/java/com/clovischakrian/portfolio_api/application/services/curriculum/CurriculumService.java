@@ -21,7 +21,7 @@ public class CurriculumService implements ICurriculumService {
         curriculum.setPresentation(newCurriculumDto.presentation());
 
         this.curriculumRepository.save(curriculum);
-        
+
         return curriculum;
     }
 }
