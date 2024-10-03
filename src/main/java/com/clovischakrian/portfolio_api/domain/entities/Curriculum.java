@@ -17,6 +17,8 @@ public class Curriculum {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID curriculumId;
+
+    @Column(unique = true)
     private String curriculumNick;
     private String name;
     private String email;
