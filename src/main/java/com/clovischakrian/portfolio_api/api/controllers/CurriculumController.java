@@ -1,5 +1,6 @@
 package com.clovischakrian.portfolio_api.api.controllers;
 
+import com.clovischakrian.portfolio_api.application.dtos.curriculums.DetailCurriculumDto;
 import com.clovischakrian.portfolio_api.application.dtos.curriculums.ListCurriculumDto;
 import com.clovischakrian.portfolio_api.application.dtos.curriculums.NewCurriculumDto;
 import com.clovischakrian.portfolio_api.application.dtos.curriculums.UpdatedCurriculumDto;
@@ -25,7 +26,7 @@ public class CurriculumController {
     @PostMapping()
     @Operation(tags = "Curriculum Controllers", summary = "Create a curriculums")
     public ResponseEntity create(@RequestBody NewCurriculumDto newCurriculumDto) {
-        Curriculum response = this.curriculumService.create(newCurriculumDto);
+        DetailCurriculumDto response = this.curriculumService.create(newCurriculumDto);
 
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
@@ -33,7 +34,7 @@ public class CurriculumController {
     @PutMapping("/{curriculumId}")
     @Operation(tags = "Curriculum Controllers", summary = "Update a curriculums")
     public ResponseEntity update(@PathVariable UUID curriculumId, @RequestBody UpdatedCurriculumDto updatedCurriculumDto) {
-        Curriculum response = this.curriculumService.update(curriculumId, updatedCurriculumDto);
+        DetailCurriculumDto response = this.curriculumService.update(curriculumId, updatedCurriculumDto);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
@@ -49,7 +50,7 @@ public class CurriculumController {
     @GetMapping("/{curriculumId}")
     @Operation(tags = "Curriculum Controllers", summary = "Detail curriculum")
     public ResponseEntity detail(@PathVariable UUID curriculumId) {
-        Curriculum response = this.curriculumService.detail(curriculumId);
+        DetailCurriculumDto response = this.curriculumService.detail(curriculumId);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }

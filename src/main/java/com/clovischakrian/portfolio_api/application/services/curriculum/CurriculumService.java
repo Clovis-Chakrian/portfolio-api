@@ -1,5 +1,6 @@
 package com.clovischakrian.portfolio_api.application.services.curriculum;
 
+import com.clovischakrian.portfolio_api.application.dtos.curriculums.DetailCurriculumDto;
 import com.clovischakrian.portfolio_api.application.dtos.curriculums.ListCurriculumDto;
 import com.clovischakrian.portfolio_api.application.dtos.curriculums.NewCurriculumDto;
 import com.clovischakrian.portfolio_api.application.dtos.curriculums.UpdatedCurriculumDto;
@@ -18,16 +19,17 @@ public class CurriculumService implements ICurriculumService {
 
     @Override
     public List<ListCurriculumDto> list() {
-        return this.curriculumRepository.findAll().stream().map(curriculum -> new ListCurriculumDto(curriculum.getCurriculumId(), curriculum.getCurriculumNick(), curriculum.getName(), curriculum.getEmail(), curriculum.getPosition(), curriculum.getPresentation())).toList();
+        return this.curriculumRepository.findAll().stream().map(ListCurriculumDto::new).toList();
     }
 
     @Override
-    public Curriculum detail(UUID curriculumId) {
-        return this.curriculumRepository.findById(curriculumId).orElseThrow();
+    public DetailCurriculumDto detail(UUID curriculumId) {
+        Curriculum curriculum = this.curriculumRepository.findById(curriculumId).orElseThrow();
+        return new DetailCurriculumDto(curriculum);
     }
 
     @Override
-    public Curriculum create(NewCurriculumDto newCurriculumDto) {
+    public DetailCurriculumDto create(NewCurriculumDto newCurriculumDto) {
         Curriculum curriculum = new Curriculum();
         curriculum.setCurriculumNick(newCurriculumDto.curriculumNick());
         curriculum.setName(newCurriculumDto.name());
@@ -37,11 +39,11 @@ public class CurriculumService implements ICurriculumService {
 
         this.curriculumRepository.save(curriculum);
 
-        return curriculum;
+        return new DetailCurriculumDto(curriculum);
     }
 
     @Override
-    public Curriculum update(UUID curriculumId, UpdatedCurriculumDto updatedCurriculumDto) {
+    public DetailCurriculumDto update(UUID curriculumId, UpdatedCurriculumDto updatedCurriculumDto) {
         Curriculum curriculum = this.curriculumRepository.findById(curriculumId).orElseThrow();
         curriculum.setCurriculumNick(updatedCurriculumDto.curriculumNick());
         curriculum.setName(updatedCurriculumDto.name());
@@ -51,7 +53,7 @@ public class CurriculumService implements ICurriculumService {
 
         this.curriculumRepository.save(curriculum);
 
-        return curriculum;
+        return new DetailCurriculumDto(curriculum);
     }
 
     @Override
