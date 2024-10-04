@@ -6,6 +6,7 @@ import com.clovischakrian.portfolio_api.application.dtos.education.NewEducationD
 import com.clovischakrian.portfolio_api.application.dtos.education.UpdatedEducationDto;
 import com.clovischakrian.portfolio_api.domain.entities.Curriculum;
 import com.clovischakrian.portfolio_api.domain.entities.Education;
+import com.clovischakrian.portfolio_api.domain.exceptions.ElementNotFoundException;
 import com.clovischakrian.portfolio_api.domain.repositories.ICurriculumRepository;
 import com.clovischakrian.portfolio_api.domain.repositories.IEducationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +28,16 @@ public class EducationService implements IEducationService {
     }
 
     @Override
-    public DetailEducationDto detail(UUID educationId) {
-        Education education = this.educationRepository.findById(educationId).orElseThrow();
+    public DetailEducationDto detail(UUID educationId) throws ElementNotFoundException {
+        Education education = this.educationRepository.findById(educationId).orElseThrow(() -> new ElementNotFoundException("Formação não encontrada."));
 
         return new DetailEducationDto(education.getEducationId(), education.getBegined(), education.getFinished(), education.getInstitution(), education.getCourseName());
     }
 
     @Override
-    public DetailEducationDto create(UUID curriculumId, NewEducationDto newEducationDto) {
+    public DetailEducationDto create(UUID curriculumId, NewEducationDto newEducationDto) throws ElementNotFoundException {
         Education education = new Education();
-        Curriculum curriculum = this.curriculumRepository.findById(curriculumId).orElseThrow();
+        Curriculum curriculum = this.curriculumRepository.findById(curriculumId).orElseThrow(() -> new ElementNotFoundException("Currículo não encontrada."));
 
         education.setBegined(newEducationDto.begined());
         education.setFinished(newEducationDto.finished());
@@ -50,8 +51,8 @@ public class EducationService implements IEducationService {
     }
 
     @Override
-    public DetailEducationDto update(UUID educationId, UpdatedEducationDto updatedEducationDto) {
-        Education education = this.educationRepository.findById(educationId).orElseThrow();
+    public DetailEducationDto update(UUID educationId, UpdatedEducationDto updatedEducationDto) throws ElementNotFoundException {
+        Education education = this.educationRepository.findById(educationId).orElseThrow(() -> new ElementNotFoundException("Formação não encontrada."));
         education.setBegined(updatedEducationDto.begined());
         education.setFinished(updatedEducationDto.finished());
         education.setInstitution(updatedEducationDto.institution());

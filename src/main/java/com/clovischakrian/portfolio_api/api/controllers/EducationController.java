@@ -11,8 +11,10 @@ import com.clovischakrian.portfolio_api.application.services.curriculum.ICurricu
 import com.clovischakrian.portfolio_api.application.services.education.IEducationService;
 import com.clovischakrian.portfolio_api.domain.entities.Curriculum;
 import com.clovischakrian.portfolio_api.domain.entities.Education;
+import com.clovischakrian.portfolio_api.domain.exceptions.ElementNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,7 @@ public class EducationController {
 
     @PostMapping()
     @Operation(tags = "Education Controllers", summary = "Create a education for specified curriculum")
-    public ResponseEntity create(@PathVariable UUID curriculumId, @RequestBody NewEducationDto newEducationDto) {
+    public ResponseEntity create(@PathVariable UUID curriculumId, @RequestBody @Valid NewEducationDto newEducationDto) throws ElementNotFoundException {
         DetailEducationDto response = this.educationService.create(curriculumId, newEducationDto);
 
         return new ResponseEntity(response, HttpStatus.CREATED);
@@ -38,7 +40,7 @@ public class EducationController {
 
     @PutMapping("/{educationId}")
     @Operation(tags = "Curriculum Controllers", summary = "Update a curriculums")
-    public ResponseEntity update(@PathVariable UUID educationId, @RequestBody UpdatedEducationDto updatedEducationDto) {
+    public ResponseEntity update(@PathVariable UUID educationId, @RequestBody @Valid UpdatedEducationDto updatedEducationDto) throws ElementNotFoundException {
         DetailEducationDto response = this.educationService.update(educationId, updatedEducationDto);
 
         return new ResponseEntity(response, HttpStatus.OK);
@@ -54,7 +56,7 @@ public class EducationController {
 
     @GetMapping("/{educationId}")
     @Operation(tags = "Education Controllers", summary = "Detail education")
-    public ResponseEntity detail(@PathVariable UUID educationId) {
+    public ResponseEntity detail(@PathVariable UUID educationId) throws ElementNotFoundException {
         DetailEducationDto response = this.educationService.detail(educationId);
 
         return new ResponseEntity(response, HttpStatus.OK);

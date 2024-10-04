@@ -3,6 +3,7 @@ package com.clovischakrian.portfolio_api.domain.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,8 +28,8 @@ public class Curriculum {
     private String presentation;
 
     @OneToMany(mappedBy = "curriculum")
-    private List<Experience> Experiences;
+    private List<Experience> Experiences = new ArrayList<>();
 
     @OneToMany(mappedBy = "curriculum")
-    private List<Education> Education;
+    private List<Education> Education = new ArrayList<>();
 }

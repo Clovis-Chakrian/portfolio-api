@@ -6,6 +6,7 @@ import com.clovischakrian.portfolio_api.application.dtos.experience.NewExperienc
 import com.clovischakrian.portfolio_api.application.dtos.experience.UpdatedExperienceDto;
 import com.clovischakrian.portfolio_api.domain.entities.Curriculum;
 import com.clovischakrian.portfolio_api.domain.entities.Experience;
+import com.clovischakrian.portfolio_api.domain.exceptions.ElementNotFoundException;
 import com.clovischakrian.portfolio_api.domain.repositories.ICurriculumRepository;
 import com.clovischakrian.portfolio_api.domain.repositories.IExperienceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +28,16 @@ public class ExperienceService implements IExperienceService {
     }
 
     @Override
-    public DetailExperienceDto detail(UUID experienceId) {
-        Experience experience = this.experienceRepository.findById(experienceId).orElseThrow();
+    public DetailExperienceDto detail(UUID experienceId) throws ElementNotFoundException {
+        Experience experience = this.experienceRepository.findById(experienceId).orElseThrow(() -> new ElementNotFoundException("Experência não encontrada."));
 
         return new DetailExperienceDto(experience.getExperienceId(), experience.getPosition(), experience.getInstitution(), experience.getBegined(), experience.getFinished(), experience.getDescription());
     }
 
     @Override
-    public DetailExperienceDto create(UUID curriculumId, NewExperienceDto newExperienceDto) {
+    public DetailExperienceDto create(UUID curriculumId, NewExperienceDto newExperienceDto) throws ElementNotFoundException {
         Experience experience = new Experience();
-        Curriculum curriculum = this.curriculumRepository.findById(curriculumId).orElseThrow();
+        Curriculum curriculum = this.curriculumRepository.findById(curriculumId).orElseThrow(() -> new ElementNotFoundException("Currículo não encontrada."));
 
         experience.setPosition(newExperienceDto.position());
         experience.setInstitution(newExperienceDto.institution());
@@ -51,8 +52,8 @@ public class ExperienceService implements IExperienceService {
     }
 
     @Override
-    public DetailExperienceDto update(UUID experienceId, UpdatedExperienceDto updatedExperienceDto) {
-        Experience experience = this.experienceRepository.findById(experienceId).orElseThrow();
+    public DetailExperienceDto update(UUID experienceId, UpdatedExperienceDto updatedExperienceDto) throws ElementNotFoundException {
+        Experience experience = this.experienceRepository.findById(experienceId).orElseThrow(() -> new ElementNotFoundException("Experência não encontrada."));
         experience.setPosition(updatedExperienceDto.position());
         experience.setInstitution(updatedExperienceDto.institution());
         experience.setBegined(updatedExperienceDto.begined());

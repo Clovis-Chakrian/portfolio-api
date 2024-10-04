@@ -5,8 +5,10 @@ import com.clovischakrian.portfolio_api.application.dtos.experience.ListExperien
 import com.clovischakrian.portfolio_api.application.dtos.experience.NewExperienceDto;
 import com.clovischakrian.portfolio_api.application.dtos.experience.UpdatedExperienceDto;
 import com.clovischakrian.portfolio_api.application.services.experience.IExperienceService;
+import com.clovischakrian.portfolio_api.domain.exceptions.ElementNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,7 @@ public class ExperienceController {
 
     @PostMapping()
     @Operation(tags = "Experience Controllers", summary = "Create a experience for specified curriculum")
-    public ResponseEntity create(@PathVariable UUID curriculumId, @RequestBody NewExperienceDto newExperienceDto) {
+    public ResponseEntity create(@PathVariable UUID curriculumId, @RequestBody @Valid NewExperienceDto newExperienceDto) throws ElementNotFoundException {
         DetailExperienceDto response = this.experienceService.create(curriculumId, newExperienceDto);
 
         return new ResponseEntity(response, HttpStatus.CREATED);
@@ -32,7 +34,7 @@ public class ExperienceController {
 
     @PutMapping("/{experienceId}")
     @Operation(tags = "Curriculum Controllers", summary = "Update a curriculums")
-    public ResponseEntity update(@PathVariable UUID experienceId, @RequestBody UpdatedExperienceDto updatedExperienceDto) {
+    public ResponseEntity update(@PathVariable UUID experienceId, @RequestBody @Valid UpdatedExperienceDto updatedExperienceDto) throws ElementNotFoundException {
         DetailExperienceDto response = this.experienceService.update(experienceId, updatedExperienceDto);
 
         return new ResponseEntity(response, HttpStatus.OK);
@@ -48,7 +50,7 @@ public class ExperienceController {
 
     @GetMapping("/{experienceId}")
     @Operation(tags = "Experience Controllers", summary = "Detail experience")
-    public ResponseEntity detail(@PathVariable UUID experienceId) {
+    public ResponseEntity detail(@PathVariable UUID experienceId) throws ElementNotFoundException {
         DetailExperienceDto response = this.experienceService.detail(experienceId);
 
         return new ResponseEntity(response, HttpStatus.OK);

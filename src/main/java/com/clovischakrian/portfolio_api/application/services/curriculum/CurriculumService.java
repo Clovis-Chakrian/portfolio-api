@@ -5,6 +5,7 @@ import com.clovischakrian.portfolio_api.application.dtos.curriculums.ListCurricu
 import com.clovischakrian.portfolio_api.application.dtos.curriculums.NewCurriculumDto;
 import com.clovischakrian.portfolio_api.application.dtos.curriculums.UpdatedCurriculumDto;
 import com.clovischakrian.portfolio_api.domain.entities.Curriculum;
+import com.clovischakrian.portfolio_api.domain.exceptions.ElementNotFoundException;
 import com.clovischakrian.portfolio_api.domain.repositories.ICurriculumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,8 @@ public class CurriculumService implements ICurriculumService {
     }
 
     @Override
-    public DetailCurriculumDto detail(UUID curriculumId) {
-        Curriculum curriculum = this.curriculumRepository.findById(curriculumId).orElseThrow();
+    public DetailCurriculumDto detail(UUID curriculumId) throws ElementNotFoundException {
+        Curriculum curriculum = this.curriculumRepository.findById(curriculumId).orElseThrow(() -> new ElementNotFoundException("Currículo não encontrada."));
         return new DetailCurriculumDto(curriculum);
     }
 
@@ -43,8 +44,8 @@ public class CurriculumService implements ICurriculumService {
     }
 
     @Override
-    public DetailCurriculumDto update(UUID curriculumId, UpdatedCurriculumDto updatedCurriculumDto) {
-        Curriculum curriculum = this.curriculumRepository.findById(curriculumId).orElseThrow();
+    public DetailCurriculumDto update(UUID curriculumId, UpdatedCurriculumDto updatedCurriculumDto) throws ElementNotFoundException {
+        Curriculum curriculum = this.curriculumRepository.findById(curriculumId).orElseThrow(() -> new ElementNotFoundException("Experência não encontrada."));
         curriculum.setCurriculumNick(updatedCurriculumDto.curriculumNick());
         curriculum.setName(updatedCurriculumDto.name());
         curriculum.setEmail(updatedCurriculumDto.email());
